@@ -21,10 +21,10 @@ BUILDPACK_DIR=`cd $(dirname $0)/..; pwd`
 if [ -f $ENV_DIR/EXIFTOOL_URL_CUSTOM ]; then
   TARBALL_URL=$( cat $ENV_DIR/EXIFTOOL_URL_CUSTOM )
   echo "Start downloading Exiftool from $TARBALL_URL" | indent
-else  
+else
   echo "Custom Exiftool URL is not set, start downloading from default location" | indent
   # set default TARBALL_URL to v11.36
-  TARBALL_URL="https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.36.tar.gz"
+  TARBALL_URL="https://exiftool.org/Image-ExifTool-12.61.tar.gz"
 fi
 
 RENAME_DIR="$(echo "$TARBALL_URL" | perl -ne '/.+\/(.+)\.tar\.gz/ && print $1')"
@@ -40,7 +40,7 @@ cd       "$TARGET_PATH"
 
 # download and unpack
 echo "Fetching   $TARBALL_URL" | indent
-curl --fail --retry 3 --retry-delay 1 --connect-timeout 3 "$TARBALL_URL" -s -o - | tar xzf -
+curl --fail --retry 3 --retry-delay 1 --connect-timeout 3 "$TARBALL_URL" -s -o - | gzip -dc - |  tar xzf -
 
 # configure path
 mkdir -p    "$PROFILE_PATH"
